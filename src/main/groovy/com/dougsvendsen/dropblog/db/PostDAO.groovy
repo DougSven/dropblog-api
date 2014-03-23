@@ -1,10 +1,9 @@
 package com.dougsvendsen.dropblog.db
 
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.SessionFactory
 
-import com.dougsvendsen.dropblog.core.Post;
-import com.yammer.dropwizard.hibernate.AbstractDAO;
+import com.dougsvendsen.dropblog.core.Post
+import com.yammer.dropwizard.hibernate.AbstractDAO
 
 class PostDAO extends AbstractDAO<Post> {
 
@@ -13,14 +12,20 @@ class PostDAO extends AbstractDAO<Post> {
 	}
 	
 	Post save(Post post) {
-		return persist(post)
+		persist(post)
 	}
 	
 	Post findById(Long id) {
-		return currentSession()
-			.createCriteria(Post)
-			.add(Restrictions.eq('id', id))
-			.uniqueResult() as Post
+		get(id)
 	}
+	
+	List<Post> list() {
+		list(criteria())
+	}
+	
+	void delete(Post post) {
+		currentSession().delete(post)
+	}
+	
 	
 }

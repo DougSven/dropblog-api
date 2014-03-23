@@ -1,8 +1,8 @@
 package com.dougsvendsen.dropblog
 
-import com.dougsvendsen.dropblog.core.Post;
-import com.dougsvendsen.dropblog.db.PostDAO;
-import com.dougsvendsen.dropblog.resources.PostResource;
+import com.dougsvendsen.dropblog.core.Post
+import com.dougsvendsen.dropblog.db.PostDAO
+import com.dougsvendsen.dropblog.resources.PostResource
 import com.yammer.dropwizard.Service
 import com.yammer.dropwizard.assets.AssetsBundle
 import com.yammer.dropwizard.config.Bootstrap
