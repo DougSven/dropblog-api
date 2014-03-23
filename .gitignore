@@ -3,7 +3,10 @@
 /bin/
 target/
 logs/
- 
+
+# Gradle #
+.gradle/
+
 # OS Files #
 .DS_Store
  
