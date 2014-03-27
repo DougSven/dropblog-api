@@ -30,7 +30,7 @@ To test the example application run the following commands.
 
 * To run the tests run
 
-`gradle test`
+        gradle test
 
 * To package the example run.
 
