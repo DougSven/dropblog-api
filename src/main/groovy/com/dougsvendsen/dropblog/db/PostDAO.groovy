@@ -24,7 +24,9 @@ class PostDAO extends AbstractDAO<Post> {
 	}
 	
 	void delete(Post post) {
-		currentSession().delete(post)
+		if (post) {
+			currentSession().delete(post)	
+		}
 	}
 	
 	
