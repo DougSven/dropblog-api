@@ -1,10 +1,13 @@
 package com.dougsvendsen.dropblog
 
+import com.dougsvendsen.dropblog.auth.AdminAuthenticator
 import com.dougsvendsen.dropblog.core.Post
+import com.dougsvendsen.dropblog.core.User
 import com.dougsvendsen.dropblog.db.PostDAO
 import com.dougsvendsen.dropblog.resources.PostResource
 import com.yammer.dropwizard.Service
 import com.yammer.dropwizard.assets.AssetsBundle
+import com.yammer.dropwizard.auth.basic.BasicAuthProvider
 import com.yammer.dropwizard.config.Bootstrap
 import com.yammer.dropwizard.config.Environment
 import com.yammer.dropwizard.db.DatabaseConfiguration
@@ -50,6 +53,6 @@ class DropblogService extends Service<DropblogConfiguration> {
 
         PostDAO postDAO = new PostDAO(hibernateBundle.sessionFactory)
         environment.addResource(new PostResource(postDAO))
-
+		environment.addProvider(new BasicAuthProvider<User>(new AdminAuthenticator(), "Blog Admin"))
     }
 }

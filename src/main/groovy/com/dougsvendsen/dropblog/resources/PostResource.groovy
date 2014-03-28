@@ -15,10 +15,12 @@ import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status
 
+import com.dougsvendsen.dropblog.core.User
 import com.dougsvendsen.dropblog.core.Post
 import com.dougsvendsen.dropblog.db.PostDAO
 import com.yammer.dropwizard.hibernate.UnitOfWork
 import com.yammer.metrics.annotation.Timed
+import com.yammer.dropwizard.auth.Auth
 
 @Path('/posts')
 @Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +50,7 @@ class PostResource {
 	@POST
 	@UnitOfWork
 	@Timed(name = 'createPost')
-	public Post createPost(@Valid Post post) {
+	public Post createPost(@Auth User user, @Valid Post post) {
 		return postDAO.save(post)
 	}
 	
@@ -106,7 +108,7 @@ class PostResource {
 	@Path('/{postId}')
 	@UnitOfWork
 	@Timed(name = 'updatePost')
-	public Post updatePost(@PathParam('postId') long postId, @Valid Post post) {
+	public Post updatePost(@Auth User user, @PathParam('postId') long postId, @Valid Post post) {
 		//Set id from URI prior to save.
 		post.id = postId
 		return postDAO.save(post)
@@ -123,7 +125,7 @@ class PostResource {
 	@Path('/{postId}')
 	@UnitOfWork
 	@Timed(name = 'deletePost')
-	public void deletePost(@PathParam('postId') long postId) {
+	public void deletePost(@Auth User user, @PathParam('postId') long postId) {
 		//Verify resource exists prior to delete
 		Post post = postDAO.findById(postId)
 		

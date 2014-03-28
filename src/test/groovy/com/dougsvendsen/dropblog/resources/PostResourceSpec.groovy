@@ -4,8 +4,6 @@ package com.dougsvendsen.dropblog.resources
 import static com.yammer.dropwizard.testing.JsonHelpers.*
 
 import java.util.List
-
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType
 import org.junit.Test
 import spock.lang.Shared
@@ -17,6 +15,7 @@ import com.yammer.dropwizard.testing.ResourceTest
 import com.dougsvendsen.dropblog.resources.PostResource
 
 class PostResourceSpec extends Specification {
+	
 
 	@Shared
 	Post post
