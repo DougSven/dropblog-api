@@ -11,8 +11,9 @@ curl -X PUT -H "Content-Type:application/json" -H "Accept:application/json" -d '
 curl -X PUT -H "Content-Type:application/json" -H "Accept:application/json" -d '{"id":"1","title":"test title 1", "content":"Test content 1", "createDate":"2013-01-01", "updateDate":"2013-01-01"}' -i http://localhost:8080/posts/1
 
 curl -X DELETE -H "Content-Type:application/json" -H "Accept:application/json" -d '{"id":"12","title":"test title 1", "content":"Test content 1", "createDate":"2013-01-01", "updateDate":"2013-01-01"}' -i http://localhost:8080/posts/12
+curl -X DELETE --user admin:hunter2 -H "Content-Type:application/json" -H "Accept:application/json" -d '{"id":"12","title":"test title 1", "content":"Test content 1", "createDate":"2013-01-01", "updateDate":"2013-01-01"}' -i http://localhost:8080/posts/12
 
-curl -X PUT -H "Content-Type:application/json" -H "Accept:application/json" -d '{"title":"test title 1", "content":"Test content 1", "createDate":"2013-01-01", "updateDate":"2013-01-01"}' -i http://localhost:8080/posts/1
+curl -X PUT --user admin:hunter2 -H "Content-Type:application/json" -H "Accept:application/json" -d '{"title":"test title 1", "content":"Test content 1", "createDate":"2013-01-01", "updateDate":"2013-01-01"}' -i http://localhost:8080/posts/12
 
 curl -X POST -H "Content-Type:application/json" -H "Accept:application/json" -d '{"title": "Long Post","content": "<script>alert('hack')</script>","createDate": 2,"updateDate": 2}' -i http://localhost:8080/posts
 

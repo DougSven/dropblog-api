@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -Ddw.http.port=$PORT -Ddw.http.adminPort=$PORT -jar build/distributions/dropwizard-blog-project-0.1-shadow.jar server dev_config.yml
