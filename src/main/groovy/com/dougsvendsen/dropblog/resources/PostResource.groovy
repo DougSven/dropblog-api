@@ -1,6 +1,5 @@
 package com.dougsvendsen.dropblog.resources
 
-import groovy.json.StringEscapeUtils;
 import groovy.util.logging.Slf4j
 
 import javax.validation.Valid
@@ -12,15 +11,15 @@ import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response.Status
 
-import com.dougsvendsen.dropblog.core.User
 import com.dougsvendsen.dropblog.core.Post
+import com.dougsvendsen.dropblog.core.User
 import com.dougsvendsen.dropblog.db.PostDAO
+import com.yammer.dropwizard.auth.Auth
 import com.yammer.dropwizard.hibernate.UnitOfWork
 import com.yammer.metrics.annotation.Timed
-import com.yammer.dropwizard.auth.Auth
 
 @Path('/posts')
 @Produces(MediaType.APPLICATION_JSON)
@@ -81,7 +80,7 @@ class PostResource {
 		Post post = postDAO.findById(postId)
 		//Return 404 if not found
 		if ( ! post) {
-			log.info 'post not found for ${ postId }'
+			log.info 'Post not found for ${ postId }'
 			throw new WebApplicationException(Status.NOT_FOUND)
 		}
 		
@@ -130,7 +129,7 @@ class PostResource {
 		Post post = postDAO.findById(postId)
 		
 		if ( ! post) {
-			log.info 'post not found for ${ postId }'
+			log.info 'Cannot delete. Post not found for ${ postId }'
 			throw new WebApplicationException(Status.NOT_FOUND)
 		} 
 		

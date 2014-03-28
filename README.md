@@ -22,7 +22,8 @@ shortcuts to the commands for running migrations and starting the service.
                 +- resources
                       +- fixtures
 #Setup
-Requires gradle, foreman
+Requires gradle and foreman.
+
 Create .env file to define admin user for update access
     ```
     ADMIN_USER=user

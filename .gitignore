@@ -17,6 +17,9 @@ logs/
 *.war
 *.ear
 *.db
+
+# Auth
+*.keystore
  
 ######################
 # Eclipse
@@ -49,4 +52,4 @@ local.properties
 .buildpath
 
 # Environment Variables
-.env
+#.env

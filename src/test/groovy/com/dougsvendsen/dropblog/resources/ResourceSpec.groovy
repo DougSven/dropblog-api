@@ -8,7 +8,8 @@ abstract class ResourceSpec extends Specification {
  
    abstract void setUpResources()
  
-   @Shared ResourceTest jersey = new ResourceTest() {
+   @Shared 
+   ResourceTest jersey = new ResourceTest() {
       @Override
       protected void setUpResources() {}
    }

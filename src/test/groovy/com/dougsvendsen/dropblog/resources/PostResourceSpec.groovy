@@ -8,44 +8,68 @@ import javax.ws.rs.core.MediaType
 import org.junit.Test
 import spock.lang.Shared
 import spock.lang.Specification
+
+import com.dougsvendsen.dropblog.auth.AdminAuthenticator;
 import com.dougsvendsen.dropblog.core.Post
+import com.dougsvendsen.dropblog.core.User;
 import com.dougsvendsen.dropblog.db.PostDAO
+import com.dougsvendsen.dropblog.db.UserDAO;
+import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.yammer.dropwizard.auth.basic.BasicAuthProvider;
+import com.yammer.dropwizard.auth.basic.BasicCredentials;
 import com.yammer.dropwizard.testing.ResourceTest
 import com.dougsvendsen.dropblog.resources.PostResource
+import com.google.common.base.Optional;
 
-class PostResourceSpec extends Specification {
+class PostResourceSpec extends ResourceSpec {
 	
 
 	@Shared
-	Post post
+	Post post = new Post(id:1)
 	@Shared
-	PostDAO postDAO
-	@Shared
-	ResourceTest jersey = new ResourceTest() {
-		  @Override
-		  protected void setUpResources() {}
-	   }
-	 
-   void setupSpec(){
-	  setUpResources()
-	  jersey.setUpJersey()
-   }
- 
-   void cleanupSpec() {
-	  jersey.tearDownJersey()
-   }
+	User authenticatedUser = new User(name:'name', password:'password')	
 	
-   void setUpResources(){
-		post = new Post(id:1)
-		postDAO = Mock(PostDAO){
+	@Override
+    void setUpResources() {
+		AdminAuthenticator adminAuthenticator = Mock(AdminAuthenticator) {
+			_ * authenticate(new BasicCredentials(authenticatedUser.name, authenticatedUser.password)) >> Optional.of(authenticatedUser)
+		}
+		PostDAO postDAO = Mock(PostDAO) {
 			_ * findById(1) >> post
-			1 * list() >> [post, post]
-			1 * save(_) >> post
+			_ * list() >> [post, post]
+			_ * save(_) >> post
 		}
 		jersey.addResource(new PostResource(postDAO))
+		jersey.addProvider(new BasicAuthProvider<User>(adminAuthenticator, "Blog Admin"))
 	}
 
+	def 'POST /posts request no auth returns 401 unauthorized'() {		
+		when:
+		jersey.client().resource("/posts").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).post(Post.class)
+		
+		then:
+		UniformInterfaceException e = thrown()
+		e.response.status == 401
+		
+	}
+	
+	def 'POST /posts with authorized user'() {
+		setup:
+		setupAuth()
+		
+		when:
+		Post response = jersey.client().resource("/posts").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).post(Post.class)
+
+		then:
+		response == post
+		
+		cleanup:
+		cleanupAuth()
+		
+	}
+	
 	def 'GET requests fetch blogposts'() {
 		expect:
 		jersey.client().resource("/posts").get(List.class).size() == 2
@@ -58,18 +82,100 @@ class PostResourceSpec extends Specification {
 
 	}
 	
-	def 'GET request for non existing returns not found'() {
+	def 'GET request for non existing returns 404 not found'() {
 		when:
 		jersey.client().resource("/posts/404").get(Post.class)
+		
 		then:
-		thrown UniformInterfaceException
+		UniformInterfaceException e = thrown()
+		e.response.status == 404
 
 	}
 	
-	def 'POST request for existing fetch blog post'() {
-		expect:
-		jersey.client().resource("/posts").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).post(Post.class) == post
+	def 'PUT /posts/{id} request no auth returns 401 unauthorized'() {
+		when:
+		Post response = jersey.client().resource("/posts/1").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+
+		then:
+		UniformInterfaceException e = thrown()
+		e.response.status == 401
+		
 	}
 	
+	def 'PUT /posts/1 update with authorized user update exectues save'() {
+		setup:
+		setupAuth()
+		
+		when:
+		Post response = jersey.client().resource("/posts/1").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+
+		then:
+		response == post
+		
+		cleanup:
+		cleanupAuth()
+		
+	}
+	
+	def 'PUT /posts/2 create with authorized user executes save'() {
+		setup:
+		setupAuth()
+		
+		when:
+		Post response = jersey.client().resource("/posts/2").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+
+		then:
+		response == post
+		
+		cleanup:
+		cleanupAuth()		
+	}
+	
+	def 'Delete /posts/{id} request no auth returns 401 unauthorized'() {	
+		when:
+		Post response = jersey.client().resource("/posts/1").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+
+		then:
+		UniformInterfaceException e = thrown()
+		e.response.status == 401
+		
+	}
+	
+	def 'DELETE request for non existing returns 404 not found'() {
+		setup:
+		setupAuth()
+		
+		when:
+		jersey.client().resource("/posts/404").delete()
+		
+		then:
+		UniformInterfaceException e = thrown()
+		e.response.status == 404
+
+		cleanup:
+		cleanupAuth()
+	}
+	
+	def 'DELETE request for existing post'() {
+		setup:
+		setupAuth()
+		
+		when:
+		jersey.client().resource("/posts/1").delete()
+		
+		then:
+		notThrown(UniformInterfaceException)
+
+		cleanup:
+		cleanupAuth()
+	}
+	
+	def setupAuth() {
+		jersey.client().addFilter(new HTTPBasicAuthFilter(authenticatedUser.name, authenticatedUser.password))
+	}
+	
+	def cleanupAuth() {
+		jersey.client().removeAllFilters()
+	}
 }
 	

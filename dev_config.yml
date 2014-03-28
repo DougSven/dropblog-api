@@ -34,6 +34,8 @@ http:
   # specifically take advantage of Jetty's continuation support.
   # If you need SSL support, you can either choose from "nonblocking+ssl" or "legacy+ssl".
   connectorType: blocking
+  #For SSL
+  #connectorType: nonblocking+ssl
 
   # The maximum amount of time a connection is allowed to be idle before being closed.
   maxIdleTime: 1s
@@ -87,15 +89,17 @@ http:
 
   # If true, forces the HTTP connector to use off-heap, direct buffers.
   useDirectBuffers: true
-
   # The hostname of the interface to which the HTTP server socket wil be found. If omitted, the
   # socket will listen on all interfaces.
   # bindHost: app1.example.com
 
-# ssl:
-# keyStorePath: ./example.keystore
-# keyStorePassword: example
-#
+  # TODO: Research how to get ssl config up and running. 
+  # Might be easiest to update to the latest Dropwizard version
+  # ssl:
+  #   keyStore: dropblog.keystore
+  #   keyStorePassword: hunter2
+  #   validatePeers: false
+
 # keyStoreType: JKS # (optional, JKS is default)
 
   # HTTP request log settings

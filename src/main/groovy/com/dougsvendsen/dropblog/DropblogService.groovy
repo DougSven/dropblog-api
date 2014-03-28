@@ -4,6 +4,7 @@ import com.dougsvendsen.dropblog.auth.AdminAuthenticator
 import com.dougsvendsen.dropblog.core.Post
 import com.dougsvendsen.dropblog.core.User
 import com.dougsvendsen.dropblog.db.PostDAO
+import com.dougsvendsen.dropblog.db.UserDAO
 import com.dougsvendsen.dropblog.resources.PostResource
 import com.yammer.dropwizard.Service
 import com.yammer.dropwizard.assets.AssetsBundle
@@ -52,7 +53,8 @@ class DropblogService extends Service<DropblogConfiguration> {
                     Environment environment) throws ClassNotFoundException {
 
         PostDAO postDAO = new PostDAO(hibernateBundle.sessionFactory)
+		UserDAO userDAO = new UserDAO()
         environment.addResource(new PostResource(postDAO))
-		environment.addProvider(new BasicAuthProvider<User>(new AdminAuthenticator(), "Blog Admin"))
+		environment.addProvider(new BasicAuthProvider<User>(new AdminAuthenticator(userDAO), 'Blog Admin'))
     }
 }
