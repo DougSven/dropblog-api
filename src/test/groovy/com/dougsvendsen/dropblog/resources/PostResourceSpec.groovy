@@ -3,25 +3,20 @@ package com.dougsvendsen.dropblog.resources
 
 import static com.yammer.dropwizard.testing.JsonHelpers.*
 
-import java.util.List
 import javax.ws.rs.core.MediaType
-import org.junit.Test
-import spock.lang.Shared
-import spock.lang.Specification
 
-import com.dougsvendsen.dropblog.auth.AdminAuthenticator;
+import spock.lang.Shared
+
+import com.dougsvendsen.dropblog.auth.AdminAuthenticator
 import com.dougsvendsen.dropblog.core.Post
-import com.dougsvendsen.dropblog.core.User;
+import com.dougsvendsen.dropblog.core.User
 import com.dougsvendsen.dropblog.db.PostDAO
-import com.dougsvendsen.dropblog.db.UserDAO;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.yammer.dropwizard.auth.basic.BasicAuthProvider;
-import com.yammer.dropwizard.auth.basic.BasicCredentials;
+import com.google.common.base.Optional
+import com.sun.jersey.api.client.UniformInterfaceException
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter
+import com.yammer.dropwizard.auth.basic.BasicAuthProvider
+import com.yammer.dropwizard.auth.basic.BasicCredentials
 import com.yammer.dropwizard.testing.ResourceTest
-import com.dougsvendsen.dropblog.resources.PostResource
-import com.google.common.base.Optional;
 
 class PostResourceSpec extends ResourceSpec {
 	
@@ -42,12 +37,12 @@ class PostResourceSpec extends ResourceSpec {
 			_ * save(_) >> post
 		}
 		jersey.addResource(new PostResource(postDAO))
-		jersey.addProvider(new BasicAuthProvider<User>(adminAuthenticator, "Blog Admin"))
+		jersey.addProvider(new BasicAuthProvider<User>(adminAuthenticator, 'Blog Admin'))
 	}
 
 	def 'POST /posts request no auth returns 401 unauthorized'() {		
 		when:
-		jersey.client().resource("/posts").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).post(Post.class)
+		jersey.client().resource('/posts').entity(jsonFixture('fixtures/simplePost.json'), MediaType.APPLICATION_JSON).post(Post.class)
 		
 		then:
 		UniformInterfaceException e = thrown()
@@ -60,7 +55,7 @@ class PostResourceSpec extends ResourceSpec {
 		setupAuth()
 		
 		when:
-		Post response = jersey.client().resource("/posts").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).post(Post.class)
+		Post response = jersey.client().resource('/posts').entity(jsonFixture('fixtures/simplePost.json'), MediaType.APPLICATION_JSON).post(Post.class)
 
 		then:
 		response == post
@@ -72,19 +67,19 @@ class PostResourceSpec extends ResourceSpec {
 	
 	def 'GET requests fetch blogposts'() {
 		expect:
-		jersey.client().resource("/posts").get(List.class).size() == 2
+		jersey.client().resource('/posts').get(List.class).size() == 2
 		
 	}
 
 	def 'GET request for existing fetch blog post'() {
 		expect:
-		jersey.client().resource("/posts/1").get(Post.class) == post
+		jersey.client().resource('/posts/1').get(Post.class) == post
 
 	}
 	
 	def 'GET request for non existing returns 404 not found'() {
 		when:
-		jersey.client().resource("/posts/404").get(Post.class)
+		jersey.client().resource('/posts/404').get(Post.class)
 		
 		then:
 		UniformInterfaceException e = thrown()
@@ -94,7 +89,7 @@ class PostResourceSpec extends ResourceSpec {
 	
 	def 'PUT /posts/{id} request no auth returns 401 unauthorized'() {
 		when:
-		Post response = jersey.client().resource("/posts/1").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+		Post response = jersey.client().resource('/posts/1').entity(jsonFixture('fixtures/simplePost.json'), MediaType.APPLICATION_JSON).put(Post.class)
 
 		then:
 		UniformInterfaceException e = thrown()
@@ -107,7 +102,7 @@ class PostResourceSpec extends ResourceSpec {
 		setupAuth()
 		
 		when:
-		Post response = jersey.client().resource("/posts/1").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+		Post response = jersey.client().resource('/posts/1').entity(jsonFixture('fixtures/simplePost.json'), MediaType.APPLICATION_JSON).put(Post.class)
 
 		then:
 		response == post
@@ -122,7 +117,7 @@ class PostResourceSpec extends ResourceSpec {
 		setupAuth()
 		
 		when:
-		Post response = jersey.client().resource("/posts/2").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+		Post response = jersey.client().resource('/posts/2').entity(jsonFixture('fixtures/simplePost.json'), MediaType.APPLICATION_JSON).put(Post.class)
 
 		then:
 		response == post
@@ -133,7 +128,7 @@ class PostResourceSpec extends ResourceSpec {
 	
 	def 'Delete /posts/{id} request no auth returns 401 unauthorized'() {	
 		when:
-		Post response = jersey.client().resource("/posts/1").entity(jsonFixture("fixtures/simplePost.json"), MediaType.APPLICATION_JSON).put(Post.class)
+		Post response = jersey.client().resource('/posts/1').entity(jsonFixture('fixtures/simplePost.json'), MediaType.APPLICATION_JSON).put(Post.class)
 
 		then:
 		UniformInterfaceException e = thrown()
@@ -146,7 +141,7 @@ class PostResourceSpec extends ResourceSpec {
 		setupAuth()
 		
 		when:
-		jersey.client().resource("/posts/404").delete()
+		jersey.client().resource('/posts/404').delete()
 		
 		then:
 		UniformInterfaceException e = thrown()
@@ -161,7 +156,7 @@ class PostResourceSpec extends ResourceSpec {
 		setupAuth()
 		
 		when:
-		jersey.client().resource("/posts/1").delete()
+		jersey.client().resource('/posts/1').delete()
 		
 		then:
 		notThrown(UniformInterfaceException)

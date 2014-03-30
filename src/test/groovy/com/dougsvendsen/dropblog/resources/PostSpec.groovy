@@ -3,13 +3,11 @@
 package com.dougsvendsen.dropblog.resources
 
 import static com.yammer.dropwizard.testing.JsonHelpers.*
-
-import org.joda.time.DateTime;
-
-import com.dougsvendsen.dropblog.core.Post
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+
+import com.dougsvendsen.dropblog.core.Post
 
 @Unroll
 class PostSpec extends Specification {

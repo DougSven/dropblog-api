@@ -11,10 +11,10 @@ abstract class ResourceSpec extends Specification {
    @Shared 
    ResourceTest jersey = new ResourceTest() {
       @Override
-      protected void setUpResources() {}
+      protected void setUpResources() { }
    }
  
-   void setupSpec(){
+   void setupSpec() {
       setUpResources()
       jersey.setUpJersey()
    }
