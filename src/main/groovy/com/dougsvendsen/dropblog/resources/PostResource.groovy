@@ -41,7 +41,7 @@ class PostResource {
 	 * <br>"title": "Post Title",
 	 * <br>"content": "Content of the post",
 	 * <br>"createDate": <em>milliseconds</em>,
-	 * <br>"updateDate": <em>milliseconds </em>
+	 * <br>"updateDate": <em>milliseconds</em>
 	 * <br>}
 	 * </p>
 	 * @return the post created

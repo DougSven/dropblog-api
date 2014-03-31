@@ -65,19 +65,19 @@ class PostResourceSpec extends ResourceSpec {
 		
 	}
 	
-	def 'GET requests fetch blogposts'() {
+	def 'GET /posts fetch blogposts'() {
 		expect:
 		jersey.client().resource('/posts').get(List.class).size() == 2
 		
 	}
 
-	def 'GET request for existing fetch blog post'() {
+	def 'GET /posts/{id} for existing fetch blog post'() {
 		expect:
 		jersey.client().resource('/posts/1').get(Post.class) == post
 
 	}
 	
-	def 'GET request for non existing returns 404 not found'() {
+	def 'GET /posts/{id} for non existing returns 404 not found'() {
 		when:
 		jersey.client().resource('/posts/404').get(Post.class)
 		

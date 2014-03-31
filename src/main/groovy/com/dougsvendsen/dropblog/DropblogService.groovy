@@ -53,6 +53,7 @@ class DropblogService extends Service<DropblogConfiguration> {
         }
     }
 
+	@SuppressWarnings('DuplicateStringLiteral')
     @Override
     public void run(DropblogConfiguration configuration,
                     Environment environment) throws ClassNotFoundException {
@@ -61,10 +62,9 @@ class DropblogService extends Service<DropblogConfiguration> {
 		UserDAO userDAO = new UserDAO()
         environment.addResource(new PostResource(postDAO))
 		environment.addProvider(new BasicAuthProvider<User>(new AdminAuthenticator(userDAO), 'Blog Admin'))
-	
-		CrossOriginFilter cof = new CrossOriginFilter()
 		
-		environment.addFilter(CrossOriginFilter.class, '*')
+		//CORS configured to allow access from any domain.
+		environment.addFilter(CrossOriginFilter, '*')
 			.setInitParam(CrossOriginFilter.ALLOWED_HEADERS_PARAM, 'origin,content-type,accept,authorization,x-requested-with')
 			.setInitParam(CrossOriginFilter.ALLOWED_METHODS_PARAM, 'GET,PUT,POST,DELETE')
 			.setInitParam(CrossOriginFilter.ALLOW_CREDENTIALS_PARAM, 'true')
