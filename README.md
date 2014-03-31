@@ -1,27 +1,7 @@
 # Dropblog
 Bootstrapped dropwizard application using lazybones.
 
-There is a working service, liquibase migrations, hibernate support and a basic gradle build system including some
-shortcuts to the commands for running migrations and starting the service.
-
-    <proj>
-        +- src
-            +- main
-            |   +- groovy
-            |   |     +- your.package.structure
-            |   |           +- core
-            |   |           +- db
-            |   |           +- healthchecks
-            |   |           +- resources
-            |   |           +- core
-            |   +- resources
-            |
-            +- test
-                +- groovy
-                |     +- // Spock tests in here!
-                +- resources
-                      +- fixtures
-#Setup
+## Setup
 Requires gradle and foreman.
 
 Create .env file to define admin user for update access
@@ -29,7 +9,7 @@ Create .env file to define admin user for update access
     ADMIN_USER=user
     ADMIN_PASSWORD=pwd
     ```
-# Running The Application
+## Running The Application
 
 To test the example application run the following commands.
 
@@ -57,4 +37,34 @@ To test the example application run the following commands.
 
         foreman run gradle run
 
+## Additional Considerations
+* Add SSL configuration
+* Persist Users to database (hash and salt password)
+* Create a Blog element which contains a collection of Posts and associated Users
+* Add a variety of search functionality for Posts i.e. get by create date.
+* Hook in postgres database
+* Add database health checks
+* Determine best way to do end to end testing
+* Add DAO database access testing
+* Upgrade to Dropwizard 0.7.0
 
+
+## Directory Layout
+
+    <proj>
+        +- src
+            +- main
+            |   +- groovy
+            |   |     +- your.package.structure
+            |   |           +- core
+            |   |           +- db
+            |   |           +- healthchecks
+            |   |           +- resources
+            |   |           +- core
+            |   +- resources
+            |
+            +- test
+                +- groovy
+                |     +- // Spock tests in here!
+                +- resources
+                      +- fixtures
