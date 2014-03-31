@@ -9,7 +9,7 @@ Create .env file to define admin user for update access
     ADMIN_USER=user
     ADMIN_PASSWORD=pwd
     ```
-## Running The Application
+## Running the Application
 
 To test the example application run the following commands.
 
